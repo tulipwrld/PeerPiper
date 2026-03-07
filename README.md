@@ -1,4 +1,4 @@
-# PeerPiper — Децентрализованная система связи
+# P2P NODE — Децентрализованная система связи
 
 > Flutter-приложение для обмена сообщениями, файлами и голосовых/видеозвонков без интернета и серверов.  
 > Работает через Wi-Fi LAN / Wi-Fi Direct — устройства общаются напрямую.
@@ -18,6 +18,7 @@
 - [Структура проекта](#структура-проекта)
 - [Зависимости](#зависимости)
 - [Логи и диагностика](#логи-и-диагностика)
+- [Инструкция]
 
 ---
 
@@ -442,3 +443,101 @@ flutter run --observatory-port=8888
 | Ретранслятор в цепочке упал | Gossip перестраивает маршрут через оставшихся пиров |
 | Участник звонка вышел | Его сессия закрывается; остальные продолжают |
 | Файл-transfer оборвался | Чанки сохранены в БД, возобновление при реконнекте |
+
+##Запуск на Windows и macOS
+Установи Flutter SDK (≥ 3.19)
+
+bash
+# Проверь версию
+flutter --version
+Клонируй репозиторий
+
+bash
+git clone https://github.com/lena4426/flutter.git
+cd flutter
+Установи зависимости
+
+bash
+flutter pub get
+🪟 Windows
+Требования
+Windows 10/11 (64-bit)
+
+PowerShell 5.0+
+
+Visual Studio 2022 (для компиляции C++ кода)
+
+Установка инструментов
+Visual Studio 2022 (обязательно)
+
+Скачай с visualstudio.microsoft.com
+
+При установке выбери workload:
+
+"Desktop development with C++"
+
+Убедись, что установлен Windows 10/11 SDK
+
+Проверь настройки Flutter
+
+bash
+flutter doctor
+Должно быть:
+
+text
+[√] Windows version (10.0.22621)
+[√] Visual Studio (2022 17.x)
+Запуск
+bash
+# Режим разработки (с горячей перезагрузкой)
+flutter run -d windows
+
+# Сборка exe-файла
+flutter build windows --release
+
+# Запуск собранного приложения
+.\build\windows\x64\runner\Release\p2p_node.exe
+🔧 Особенности Windows
+Брандмауэр — при первом запуске разреши приложению доступ в сеть
+
+Wi-Fi Direct — работает только на Windows 10/11 с поддержкой Wi-Fi Direct
+
+Пути к файлам — используй обратные слеши (\) или raw-строки: r"C:\Users\..."
+
+🍎 macOS
+Требования
+macOS 12+ (Monterey или новее)
+
+Xcode 15+
+
+CocoaPods
+
+Установка инструментов
+Xcode (обязательно)
+
+bash
+# Установка через App Store или:
+xcode-select --install
+CocoaPods (для iOS-симулятора)
+
+bash
+sudo gem install cocoapods
+Проверь настройки Flutter
+
+bash
+flutter doctor
+Должно быть:
+
+text
+[✓] Xcode - develop for iOS and macOS (Xcode 15.x)
+[✓] CocoaPods (1.15.x)
+Запуск
+bash
+# Режим разработки
+flutter run -d macos
+
+# Сборка приложения
+flutter build macos --release
+
+# Запуск собранного приложения
+open build/macos/Build/Products/Release/p2p_node.app
