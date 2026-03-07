@@ -444,20 +444,19 @@ flutter run --observatory-port=8888
 | Участник звонка вышел | Его сессия закрывается; остальные продолжают |
 | Файл-transfer оборвался | Чанки сохранены в БД, возобновление при реконнекте |
 
-##Запуск на Windows и macOS
+## Запуск на Windows и macOS
+
 Установи Flutter SDK (≥ 3.19)
 
-bash
+
 # Проверь версию
 flutter --version
 Клонируй репозиторий
 
-bash
-git clone https://github.com/lena4426/flutter.git
 cd flutter
 Установи зависимости
 
-bash
+
 flutter pub get
 🪟 Windows
 Требования
@@ -480,7 +479,6 @@ Visual Studio 2022 (обязательно)
 
 Проверь настройки Flutter
 
-bash
 flutter doctor
 Должно быть:
 
@@ -488,7 +486,7 @@ text
 [√] Windows version (10.0.22621)
 [√] Visual Studio (2022 17.x)
 Запуск
-bash
+
 # Режим разработки (с горячей перезагрузкой)
 flutter run -d windows
 
@@ -515,24 +513,24 @@ CocoaPods
 Установка инструментов
 Xcode (обязательно)
 
-bash
+
 # Установка через App Store или:
 xcode-select --install
 CocoaPods (для iOS-симулятора)
 
-bash
+
 sudo gem install cocoapods
 Проверь настройки Flutter
 
-bash
+
 flutter doctor
 Должно быть:
 
-text
+
 [✓] Xcode - develop for iOS and macOS (Xcode 15.x)
 [✓] CocoaPods (1.15.x)
 Запуск
-bash
+
 # Режим разработки
 flutter run -d macos
 
@@ -541,3 +539,4 @@ flutter build macos --release
 
 # Запуск собранного приложения
 open build/macos/Build/Products/Release/p2p_node.app
+
