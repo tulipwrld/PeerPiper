@@ -18,6 +18,7 @@
 - [Структура проекта](#структура-проекта)
 - [Зависимости](#зависимости)
 - [Логи и диагностика](#логи-и-диагностика)
+- [Инструкция](#)
 
 ---
 
@@ -443,91 +444,100 @@ flutter run --observatory-port=8888
 | Участник звонка вышел | Его сессия закрывается; остальные продолжают |
 | Файл-transfer оборвался | Чанки сохранены в БД, возобновление при реконнекте |
 
----
+##Запуск на Windows и macOS
+Установи Flutter SDK (≥ 3.19)
 
-## AI (локальный и сетевой)
+bash
+# Проверь версию
+flutter --version
+Клонируй репозиторий
 
-В проекте поддержан отдельный AI-чат.
+bash
+git clone https://github.com/lena4426/flutter.git
+cd flutter
+Установи зависимости
 
-### Как работает
+bash
+flutter pub get
+🪟 Windows
+Требования
+Windows 10/11 (64-bit)
 
-- Если на узле запущен `AI_API` (HTTP `127.0.0.1:3000`), приложение отмечает этот узел как AI-host.
-- В левой панели появляется секция `AI`.
-- На узле с AI-host доступен `Local AI` чат.
-- На других узлах доступен удаленный AI-чат с этим узлом.
-- Запросы к AI пересылаются через P2P как `e2ee_llm` (зашифровано pairwise-ключом).
+PowerShell 5.0+
 
-### Запуск AI API
+Visual Studio 2022 (для компиляции C++ кода)
 
-```bash
-python AI_API/main.py
-```
+Установка инструментов
+Visual Studio 2022 (обязательно)
 
-Проверка:
+Скачай с visualstudio.microsoft.com
 
-```bash
-curl http://127.0.0.1:3000/health
-```
+При установке выбери workload:
 
-### Важно
+"Desktop development with C++"
 
-- AI-host определяется при старте приложения: сначала подними `AI_API`, потом запусти/перезапусти клиент.
-- Если модель не поднимается, `AI_API/ai.py` включает fallback-режим и возвращает ответ с пояснением.
+Убедись, что установлен Windows 10/11 SDK
 
----
+Проверь настройки Flutter
 
-## Федерации (между разными LAN)
+bash
+flutter doctor
+Должно быть:
 
-Добавлен отдельный модуль: `federation_bridge/`.
+text
+[√] Windows version (10.0.22621)
+[√] Visual Studio (2022 17.x)
+Запуск
+bash
+# Режим разработки (с горячей перезагрузкой)
+flutter run -d windows
 
-### Назначение
+# Сборка exe-файла
+flutter build windows --release
 
-Связывает две (или более) изолированные локальные сети через центральный broker.
-Если получатель не найден в своей сети, шифрованный envelope можно передать в другую сеть через bridge.
+# Запуск собранного приложения
+.\build\windows\x64\runner\Release\p2p_node.exe
+🔧 Особенности Windows
+Брандмауэр — при первом запуске разреши приложению доступ в сеть
 
-### Состав
+Wi-Fi Direct — работает только на Windows 10/11 с поддержкой Wi-Fi Direct
 
-- `federation_bridge/broker.py` — центральный broker (FastAPI + SQLite очередь)
-- `federation_bridge/edge_connector.py` — edge-агент (outbox -> broker -> inbox)
-- `federation_bridge/smoke_test.py` — быстрый smoke test API
-- `federation_bridge/README.md` — подробная инструкция
+Пути к файлам — используй обратные слеши (\) или raw-строки: r"C:\Users\..."
 
-### Быстрый старт
+🍎 macOS
+Требования
+macOS 12+ (Monterey или новее)
 
-```bash
-pip install -r federation_bridge/requirements.txt
-python federation_bridge/broker.py
-```
+Xcode 15+
 
-На каждой сети запусти свой edge-коннектор:
+CocoaPods
 
-```bash
-python federation_bridge/edge_connector.py --broker http://<broker-host>:8787 --network-id lan-a --node-id edge-a
-python federation_bridge/edge_connector.py --broker http://<broker-host>:8787 --network-id lan-b --node-id edge-b
-```
+Установка инструментов
+Xcode (обязательно)
 
----
+bash
+# Установка через App Store или:
+xcode-select --install
+CocoaPods (для iOS-симулятора)
 
-## Тесты
+bash
+sudo gem install cocoapods
+Проверь настройки Flutter
 
-Добавлены новые тесты:
+bash
+flutter doctor
+Должно быть:
 
-- `test/unit/call_service_source_picker_test.dart` — unit: выбор desktop source для screenshare
-- `test/integration/search_dialog_ai_test.dart` — integration: поиск `Local AI` и удаленного AI-чата
-- `test/load/packet_serialization_load_test.dart` — load: массовая сериализация пакетов
+text
+[✓] Xcode - develop for iOS and macOS (Xcode 15.x)
+[✓] CocoaPods (1.15.x)
+Запуск
+bash
+# Режим разработки
+flutter run -d macos
 
-Запуск:
+# Сборка приложения
+flutter build macos --release
 
-```bash
-flutter test test/unit/call_service_source_picker_test.dart
-flutter test test/integration/search_dialog_ai_test.dart
-flutter test test/load/packet_serialization_load_test.dart
-```
-
-Полный прогон:
-
-```bash
-flutter test
-```
-
-Если в окружении CI/локально есть долгий cold-start Flutter toolchain, отдельные тесты могут упираться в timeout — это инфраструктурное ограничение запуска, а не логическая ошибка тестов.
+# Запуск собранного приложения
+open build/macos/Build/Products/Release/p2p_node.app
